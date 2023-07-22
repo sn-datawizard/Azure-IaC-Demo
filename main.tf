@@ -18,10 +18,10 @@ provider "azurerm" {
   features {}
 }
 
+
 provider "databricks" {
   host = var.DATABRICKS_HOST
 }
-
 
 # Create a resource group
 resource "azurerm_resource_group" "amazingetl" {
@@ -89,6 +89,7 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "amazingetl-datalake-gold" 
 }
 
 
+
 # Create Azure Databricks workspace
 resource "azurerm_databricks_workspace" "amazingetl-databricks" {
   name                = "bricksworkspace-amazingetl"
@@ -122,3 +123,29 @@ resource "databricks_cluster" "amazingetl-databrickscluster" {
 }
 
 
+resource "azurerm_data_factory" "amazingetl-datafactory" {
+  name                = "df-amazingetl"
+  location            = azurerm_resource_group.amazingetl.location
+  resource_group_name = azurerm_resource_group.amazingetl.name
+}
+
+resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "amazingetl-linkedservice-bronze" {
+  name                  = "ls-bronze-amazingetl"
+  data_factory_id       = azurerm_data_factory.amazingetl-datafactory.id
+  storage_account_key   = azurerm_storage_data_lake_gen2_filesystem.amazingetl-datalake-bronze.storage_account_id
+  url                   = "https://datalakestoragegen2"
+}
+
+resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "amazingetl-linkedservice-silver" {
+  name                  = "ls-bronze-amazingetl"
+  data_factory_id       = azurerm_data_factory.amazingetl-datafactory.id
+  storage_account_key   = azurerm_storage_data_lake_gen2_filesystem.amazingetl-datalake-silver.storage_account_id
+  url                   = "https://datalakestoragegen2"
+}
+
+resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "amazingetl-linkedservice-gold" {
+  name                  = "ls-bronze-amazingetl"
+  data_factory_id       = azurerm_data_factory.amazingetl-datafactory.id
+  storage_account_key   = azurerm_storage_data_lake_gen2_filesystem.amazingetl-datalake-gold.storage_account_id
+  url                   = "https://datalakestoragegen2"
+}
