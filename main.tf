@@ -39,7 +39,7 @@ resource "azurerm_virtual_network" "amazingetl_network" {
 }
 
 
-/*
+
 # Create event hub namespace and event hub
 resource "azurerm_eventhub_namespace" "amazingetl_hubnamespace" {
   name                = "hubcontainer-amazingetl"
@@ -60,7 +60,6 @@ resource "azurerm_eventhub" "amazingetl_hub" {
   partition_count     = 2
   message_retention   = 1
 }
-*/
 
 
 # Create storage account and data lake gen2
@@ -90,7 +89,6 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "amazingetl-datalake-gold" 
 }
 
 
-/*
 # Create Azure Databricks workspace
 resource "azurerm_databricks_workspace" "amazingetl-databricks" {
   name                = "bricksworkspace-amazingetl"
@@ -122,5 +120,5 @@ resource "databricks_cluster" "amazingetl-databrickscluster" {
     max_workers = 8
   }
 }
-*/
+
 
